@@ -1,88 +1,78 @@
+
+var mongoose = require('mongoose');
 var express = require('express');
 var app = express();
 var path = require('path');
-var adminRouter = express.Router();
-var loginRouter = express.Router();
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var User = require('./models/user');
 
+var port = process.env.PORT || 5000;
+
+//APP CONFIGURATION
+
+app.use(bodyParser.urlencoded({
+  extended:true
+}));
+app.use(bodyParser.json());
+
+//CORS
+
+app.use(function(req,res,next){
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST');
+  res.setHeader('Access-Control-Allow-Headers','X-Requested-Width,content-type,Authorization');
+  next();
+});
+
+app.use(morgan('dev'));
+
+mongoose.connect('mongodb://localhost/pokemon');
+//mongoose.connect('mongodb://admin:peptic.far@ds021434.mlab.com:21434/pokemon_yfx');
+
+//API ROUTES
 app.get('/',function(req, res){
-  res.sendFile(path.join(__dirname) + '/index.html');
+  res.send('welcome to zion (Our mother api)');
 });
 
-app.get('/error',function(req, res){
-  res.send('hubo un error');
+//express  router
+var apiRouter = express.Router();
+
+// Routes /Users
+apiRouter.route('/users')
+//create a user through POST
+// URL : http://localhost:5000/api/users
+.post(function(req, res){
+  var user = new User();
+  user.name = req.body.name;
+  user.username = req.body.username;
+  user.password = req.body.password;
+
+  user.save(function(err){
+    //verifi duplicate entry on username
+    console.log(err);
+    if(err){
+      return res.json({ success : false , message : 'El nombre de usuario ya existe'});
+    }
+    res.json({message:'usuario registrado'});
+  });
+})
+.get(function(req, res){
+  User.find(function(err,users){
+    if(err) return res.send(err);
+    res.json(users);
+  })
 });
 
-//Middleware
 
-adminRouter.use(function (req,res, next){
-  console.log(req.method, req.url);
-  next();
+//Accesed http://localhost:5000/api
+apiRouter.get('/',function(req, res){
+  res.json({ message: 'Stop to try hit me and hit me!'});
 });
 
-adminRouter.param('name',function(req,res,next,name){
-  req.name = "Mr Robot was here!";
-  console.log("req-name",req.name);
-  console.log("name",name);
-  next();
-});
+//Register our ROUTES
 
-loginRouter.use(function (req,res, next){
-  console.log(req.method, req.url);
-  next();
-});
+app.use('/api',apiRouter);
 
-loginRouter.param('name',function(req,res,next,name){
-  if ( name === 'joseluis'){
-    req.name = name;
-    next();
-  }else{
-    res.send('No esta registrado');
-  }
-});
-
-loginRouter.param('password',function(req,res,next,password){
-  if ( password === 'peru'){
-    req.password = password;
-    next();
-  }else{
-    res.redirect('/error');
-    //res.send('el password es incorrecto');
-  }
-});
-
-//rutas
-adminRouter.get('/',function(req, res){
-  res.send('Estoy en la página principal del admin');
-});
-
-adminRouter.get('/users/',function(req, res){
-  res.send('Estoy en la página principal del usuarios');
-});
-
-adminRouter.get('/users/:name',function(req, res){
-  res.send('hola ' + req.name);
-});
-
-adminRouter.get('/post',function(req, res){
-  res.send('Estoy en la página principal del posts');
-});
-
-loginRouter.get('/',function(req,res){
-  res.send('Pagina de login');
-});
-
-loginRouter.get('/user/',function(req,res){
-  res.send('Pagina de login del usuario');
-});
-
-loginRouter.get('/user/:name/:password',function(req,res){
-  res.send('Se logeo el usuario ' + req.name);
-});
-
-app.use('/admin',adminRouter);
-app.use('/login',loginRouter);
-
-app.set('port', (process.env.PORT || 5000));
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
+app.listen(port);
+console.log('Neo comes over port ' + port);
