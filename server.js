@@ -27,8 +27,8 @@ app.use(function(req, res, next) {
 
 app.use(morgan('dev'));
 
-mongoose.connect('mongodb://localhost/pokemon');
-//mongoose.connect('mongodb://jonico:jonico@ds023105.mlab.com:23105/heroku_rrm4zt6r');
+//mongoose.connect('mongodb://localhost/pokemon');
+mongoose.connect('mongodb://jonico:jonico@ds023105.mlab.com:23105/heroku_rrm4zt6r');
 
 
 //API ROUTES
@@ -103,7 +103,10 @@ apiRouter.route('/pokemons/:pokemon_id')
     .get(function(req, res) {
         Pokemon.findById(req.params.pokemon_id, function(err, poke) {
             if (err) return res.send(err);
-            res.json({message: poke.sayHi() });
+            res.json({
+                message: poke.sayHi(),
+                count : 'El pokemon ha sido consultado ' + poke.visist + ' veces'
+            });
         });
     })
     .put(function(req, res) {
@@ -122,12 +125,14 @@ apiRouter.route('/pokemons/:pokemon_id')
         });
     })
     .delete(function(req, res) {
-      Pokemon.remove({
-        _id: req.params.pokemon_id
-      },function(err,poke){
-        if (err) return res.send(err);
-        res.json({ message : 'El pokemon eliminado'});
-      })
+        Pokemon.remove({
+            _id: req.params.pokemon_id
+        }, function(err, poke) {
+            if (err) return res.send(err);
+            res.json({
+                message: 'El pokemon eliminado'
+            });
+        })
     })
 apiRouter.route('/users/:user_id')
     .get(function(req, res) {
@@ -155,12 +160,14 @@ apiRouter.route('/users/:user_id')
         });
     })
     .delete(function(req, res) {
-      User.remove({
-        _id: req.params.user_id
-      },function(err,user){
-        if (err) return res.send(err);
-        res.json({ message : 'El usuario eliminado'});
-      })
+        User.remove({
+            _id: req.params.user_id
+        }, function(err, user) {
+            if (err) return res.send(err);
+            res.json({
+                message: 'El usuario eliminado'
+            });
+        })
     })
 
 //Accesed http://localhost:5000/api

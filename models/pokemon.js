@@ -23,10 +23,10 @@ var PokemonSchema = new Schema({
       default : 0,
     }
 });
-PokemonSchema.post('save',function(next){
-  var pokemon = this;
-  console.log('pokemon', pokemon.name);
-  next();
+PokemonSchema.post('findOne',function(poke){
+  poke.visist ++;
+  poke.save();
+  console.log('pokemon', poke.visist);
 });
 
 PokemonSchema.methods.sayHi = function() {
