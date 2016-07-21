@@ -18,15 +18,18 @@ var PokemonSchema = new Schema({
         type: String,
         required: true
     },
-    visist : {
+    count : {
       type: Number,
       default : 0,
+    },
+    owner : {
+      type: Schema.ObjectId,
+      ref : 'User',
     }
 });
 PokemonSchema.post('findOne',function(poke){
-  poke.visist ++;
+  poke.count ++;
   poke.save();
-  console.log('pokemon', poke.visist);
 });
 
 PokemonSchema.methods.sayHi = function() {

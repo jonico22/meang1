@@ -27,8 +27,8 @@ app.use(function(req, res, next) {
 
 app.use(morgan('dev'));
 
-//mongoose.connect('mongodb://localhost/pokemon');
-mongoose.connect('mongodb://jonico:jonico@ds023105.mlab.com:23105/heroku_rrm4zt6r');
+mongoose.connect('mongodb://localhost/pokemon');
+//mongoose.connect('mongodb://jonico:jonico@ds023105.mlab.com:23105/heroku_rrm4zt6r');
 
 
 //API ROUTES
@@ -78,6 +78,7 @@ apiRouter.route('/pokemons')
         var pokemon = new Pokemon();
         pokemon.name = req.body.name;
         pokemon.type = req.body.type;
+        pokemon.owner = req.body.owner;
 
         pokemon.save(function(err) {
             //verifi duplicate entry on username
@@ -94,10 +95,26 @@ apiRouter.route('/pokemons')
         });
     })
     .get(function(req, res) {
-        Pokemon.find(function(err, poke) {
+        /*Pokemon.find(function(err, poke) {
             if (err) return res.send(err);
             res.json(poke);
-        })
+        })*/
+        Pokemon.find({}, function(err, pokemons) {
+                User.populate(pokemons, {
+                    path: 'owner',
+                    select: { name:1,username:1},
+                    match: { username : 'jonico22'}
+                }, function(err, pokemons) {
+                    res.status(200).json(pokemons);
+                })
+            })
+            //.skip(2).limit(3)
+            //.sort({name:1}) //asc 1 - desc -1
+            .select({
+                name: 1,
+                type: 1,
+                owner: 1
+            })
     });
 apiRouter.route('/pokemons/:pokemon_id')
     .get(function(req, res) {
@@ -105,7 +122,7 @@ apiRouter.route('/pokemons/:pokemon_id')
             if (err) return res.send(err);
             res.json({
                 message: poke.sayHi(),
-                count : 'El pokemon ha sido consultado ' + poke.visist + ' veces'
+                count: 'El pokemon ha sido consultado ' + poke.count + ' veces'
             });
         });
     })
@@ -115,7 +132,7 @@ apiRouter.route('/pokemons/:pokemon_id')
 
             if (req.body.name) poke.name = req.body.name;
             if (req.body.type) poke.type = req.body.type;
-
+            if (req.body.owner) poke.owner = req.body.owner;
             poke.save(function(err) {
                 if (err) return res.send(err);
                 res.json({
@@ -132,6 +149,31 @@ apiRouter.route('/pokemons/:pokemon_id')
             res.json({
                 message: 'El pokemon eliminado'
             });
+        })
+    })
+
+apiRouter.route('/pokemons/type/:type')
+    .get(function(req, res) {
+        Pokemon.find({
+            //type: /lectric/
+            //type: new RegExp(req.params.type,'i'),
+            //name: /chu/i
+            $or: [{
+                type: /Electric/i
+            }, {
+                type: /Psychic/i
+            }],
+            /*count : {
+              $gt : 0,
+              $lt : 10
+            }*/
+            count: {
+                $in: [1, 0]
+            }
+        }, function(err, pokemons) {
+            res.json({
+                pokemons
+            })
         })
     })
 apiRouter.route('/users/:user_id')
