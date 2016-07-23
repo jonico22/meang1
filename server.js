@@ -4,8 +4,11 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
+var jwt = require('jsonwebtoken');
 var User = require('./models/user');
 var Pokemon = require('./models/pokemon');
+
+var superSecret = 'strangeThingHappendInArea51';
 
 var port = process.env.PORT || 5000;
 
@@ -36,8 +39,89 @@ app.get('/', function(req, res) {
     res.send('welcome to zion (Our mother api)');
 });
 
+
 //express  router
 var apiRouter = express.Router();
+apiRouter.post('/authenticate',function(req,res){
+  User.findOne({
+    username: req.body.username
+  })
+  .select('name username password')
+  .exec(function(err,user){
+    if(err) throw err;
+    //username was not found
+    if(!user){
+      res.json({
+        success: false,
+        message: 'La autentificacion a fallado. El usuario No existe'
+      })
+    } else if(user){
+      //validate if password matches
+      var validPasssword = user.comparePassword(req.body.password)
+
+      if(!validPasssword){
+        res.json({
+          success : false,
+          message: 'La autentificacion a fallado. Contraseña incorrecta'
+        })
+      } else{
+        // if authenticate process is OK then
+        //generate a token
+        // payload , secretPrivateKey, options ,callback
+        var token = jwt.sign({
+          name : user.name,
+          username : user.username,
+        },superSecret,{
+          expiresIn : '24h'
+        });
+        res.json({
+          success : true,
+          message : 'Acceso Autorizado',
+          token: token
+        })
+      }
+    }
+
+
+
+  })
+})
+
+//middleware to verifya token
+
+apiRouter.use(function(req,res,next){
+  console.log('alguien ha entrado a la matrix');
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+  if(token){
+    //verify token
+    jwt.verify(token,superSecret,function(err,decoded){
+      if(err){
+        return res.json({
+          success : false,
+          message : "Fallo la autenticacion del token."
+        })
+      }else{
+        console.log(decoded);
+        req.decoded = decoded;
+        next();
+      }
+    })
+  }else{
+    return res.status(403).send({
+      success : false,
+      message : 'No se envio el token.'
+    });
+  }
+
+})
+apiRouter.get('/', function(req,res){
+  res.json({
+    message: "welcome to the matrix",
+    user : req.decoded.name
+  })
+})
+
 
 // Routes /Users
 apiRouter.route('/users')
