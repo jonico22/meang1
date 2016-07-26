@@ -1,0 +1,12 @@
+.squares{
+  background: white;
+}
+.squares div{
+  border: 2px solid #cacaca;
+  width: 150px;
+  height: 150px;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 5px;
+  overflow: scroll;
+}
