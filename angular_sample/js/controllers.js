@@ -1,9 +1,18 @@
 angular.module('myApp.controllers', [])
-    .controller('mainCtrl', function($scope, $filter) {
+    .controller('mainCtrl', function($scope, $filter, cityService,getCity) {
         $scope.message = 'La aplicacion ha sido creada';
         $scope.name = "Jose Luis";
         $scope.toLowerCase = $filter('lowercase')($scope.name);
-        console.log($scope.message);
+        $scope.citys = getCity;
+
+        $scope.isCapatilized = function(str){
+          return str[0] == str[0].toUpperCase();
+        }
+
+        $scope.getNameCity = function(city){
+          $scope.result = city.city;
+        }
+
     })
     .controller('clockCtrl', function($scope) {
         $scope.clock = {

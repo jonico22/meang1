@@ -6,6 +6,8 @@
     <title>angular 101</title>
     <link rel="stylesheet" href="../angular_sample/css/base.css">
     <script src="../node_modules/angular/angular.min.js"></script>
+    <script src="../angular_sample/js/services.js"></script>
+    <script src="../angular_sample/js/directives.js"></script>
     <script src="../angular_sample/js/controllers.js"></script>
     <script src="../angular_sample/js/app.js"></script>
 </head>
@@ -13,6 +15,9 @@
 <body>
 
     <div class="squares" ng-controller="mainCtrl">
+      <div bio></div>
+      <bioelem></bioelem>
+
       <div class="ng101">
         {{ "hola mundo" }} {{ 5+3000 }}
         <hr> {{ message }}
@@ -53,7 +58,55 @@
             'city': 'Chincha',
           }] | filter:{ 'city' : 'Arequipa' }
         }}
+        <br>
+        {{ ['hola','Mundo','mundial'] |  filter:isCapatilized }}
+        <br>
+        {{
+          {
+            'dish': 'Roco Relleno',
+            'city': 'Arequipa',
+          } | json
+        }}
+        <br>
+        {{ ['a','b','c','d','e'] | limitTo:3 }}
       </div>
+      <div class="orderBy">
+        {{
+          [{
+            'dish': 'Roco Relleno',
+            'city': 'Arequipa',
+          },
+          {
+            'dish': 'Adobo',
+            'city': 'Arequipa',
+          },
+          {
+            'dish': 'Quesillo con miel',
+            'city': 'Cajamarca',
+          },
+          {
+            'dish': 'Shambar',
+            'city': 'Trujillo',
+          },
+          {
+            'dish': 'Carapulcra',
+            'city': 'Chincha',
+          }] | orderBy : '+dish'
+        }}
+      </div>
+      <br>
+      <div class="listCity">
+        <h3>listado ciudades</h3>
+        <ol >
+          <li ng-repeat="city in citys" >
+            <span ng-click="getNameCity(city)">
+              {{ city.abrev }}
+            </span>
+
+          </li>
+        </ol>
+      </div>
+      <p>{{ result }}</p>
     </div>
     <div ng-controller="clockCtrl">
       <h2>Son las {{ clock.now | date: 'medium'}}</h2>
@@ -66,7 +119,7 @@
       <h2>Son las {{ clock.now | date: 'shortTime'}}</h2>
       <h2>Son las {{ clock.now | date: 'MMMM'}}</h2>
       <h2>Son las {{ clock.now | date: 'a'}}</h2>
-
+      <div clock></div>
       <button type="button" ng-click="changeClock()">Cambiar fecha / hora </button>
     </div>
 
