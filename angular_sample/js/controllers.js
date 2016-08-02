@@ -1,4 +1,5 @@
 angular.module('myApp.controllers', [])
+
     .controller('mainCtrl', function($scope, $filter, cityService,getCity) {
         $scope.message = 'La aplicacion ha sido creada';
         $scope.name = "Jose Luis";
@@ -27,5 +28,21 @@ angular.module('myApp.controllers', [])
         setInterval(function() {
             $scope.$apply(updateClock);
         }, 1000);
-
+    })
+    .controller('citiesCtrl', function($scope, cityService) {
+      $scope.cities = cityService.getCities();
+      $scope.myLink = "http://google.com";
+      $scope.fields =[
+        { placeholder: 'abbr' , isRequired : true },
+        { placeholder: 'name' , isRequired : true }
+      ]
+      $scope.searchCity = function(cityAbbr){
+        $scope.city = cityService.getCity(cityAbbr)[0];
+      }
+      $scope.calculate = function(){
+        $scope.result = Number($scope.myNumber) * 5 ;
+      }
+      $scope.generateNumber = function(){
+        return Math.floor((Math.random() * 10) + 1 );
+      }
     })
