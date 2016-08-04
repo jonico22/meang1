@@ -35,9 +35,9 @@ mongoose.connect('mongodb://localhost/pokemon');
 
 
 //API ROUTES
-app.get('/', function(req, res) {
+/*app.get('/', function(req, res) {
     res.send('welcome to zion (Our mother api)');
-});
+});*/
 
 
 //express  router
@@ -306,6 +306,11 @@ apiRouter.get('/', function(req, res) {
 //Register our ROUTES
 
 app.use('/api', apiRouter);
+
+app.use(express.static(__dirname + '/public'));
+app.get('*',function(req,res){
+  res.sendFile(path.join(__dirname + '/public/views/index.html'));
+})
 
 app.listen(port);
 console.log('Neo comes over port ' + port);
