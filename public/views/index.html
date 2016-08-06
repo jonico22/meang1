@@ -21,32 +21,26 @@
 </head>
 
 <body>
-    <h1>Gotta catch em all!</h1>
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/login">Login</a>
-            <a href="/users">Usuarios</a>
-            <a href="/pokemons">Pokemones</a>
-        </nav>
-    </header>
 
-    <lx-tabs lx-active-tab="vm.activeTab">
-        <lx-tab lx-label="Lorem Ipsum 1">
-            <p class="p+">Lorem Ipsum Content 1</p>
-        </lx-tab>
+    <div class="p+">
+          <div class="card">
+              <div class="card__actions" ng-controller="mainCtrl as main">
+                <lx-button lx-color="orange" lx-type="flat" ng-click="main.goTo('/login')">Home</lx-button>
+                  <lx-button lx-color="orange" lx-type="flat" ng-click="main.goTo('/users')">Usuarios</lx-button>
+                  <lx-button lx-color="orange" lx-type="flat" ng-click="main.goTo('/pokemons')">Pokemons</lx-button>
+              </div>
+              <div flex-container="row">
+                  <div flex-item flex-container="column">
+                      <div flex-item>
+                          <div class="p+">
+                              <div ng-view></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
-        <lx-tab lx-label="Lorem Ipsum 2" ng-disabled="vm.tabIsDisabled">
-            <p class="p+">Lorem Ipsum Content 2</p>
-        </lx-tab>
-
-        <lx-tab lx-label="Lorem Ipsum 3">
-            <p class="p+">Lorem Ipsum Content 3</p>
-        </lx-tab>
-    </lx-tabs>
-    <div ng-view>
-
-    </div>
 </body>
 
 </html>

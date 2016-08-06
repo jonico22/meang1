@@ -1,4 +1,6 @@
 angular.module('pokeApp',[
   'pokeApp.routes',
-  'pokeApp.controllers','lumx'
+  'pokeApp.controllers',
+  'pokeApp.services',
+  'lumx'
 ]);

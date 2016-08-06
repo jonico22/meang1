@@ -1,6 +1,55 @@
-<div>
-  <h1>pokemon Page</h1>
-  <p>
-    {{ pokemon.message }}
-  </p>
+
+<div flex-item="6" class="mt++">
+        <span class="fs-title display-block mb">listas de pokemon</span>
+        <div flex-item="6">
+        <div class="card">
+            <div>
+                <lx-search-filter>
+                    <input type="text" ng-model="pokemon.search.name">
+                </lx-search-filter>
+            </div>
+        </div>
+      </div>
+        <div class="divider divider--dark"></div>
+
+        <ul class="list mt++">
+            <li class="list-row list-row--has-separator" ng-repeat="poke in pokemon.pokemons | filter:pokemon.search">
+                <div class="list-row__primary">
+                    <img ng-src="bd_pokemon/pokemons/{{poke.name | lowercase }}.jpg" width="40" height="40" class="img-round" />
+
+                </div>
+
+                <div class="list-row__content">
+                    <span>{{poke.name}}</span>
+                </div>
+
+                <div class="list-row__secondary">
+                  <lx-dropdown lx-position="right" lx-over-toggle="true" lx-width="250">
+                    <lx-dropdown-toggle>
+                        <lx-button lx-color="black" lx-type="icon">
+                            <i class="mdi mdi-dots-vertical"></i>
+                        </lx-button>
+                    </lx-dropdown-toggle>
+
+                    <lx-dropdown-menu>
+                        <ul>
+                            <li><a class="dropdown-link"> height : {{poke.height}}</a></li>
+                            <li><a class="dropdown-link">
+                              weight : {{ poke.weight}}
+                            </a></li>
+                            <li><a class="dropdown-link">
+                              abilities : {{
+                              poke.abilities         }}</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li><span class="dropdown-link dropdown-link--is-header">Header</span></li>
+                            <li><a class="dropdown-link">Separated link</a></li>
+                        </ul>
+                    </lx-dropdown-menu>
+                </lx-dropdown>
+                </div>
+            </li>
+
+
+        </ul>
+    </div>
 </div>

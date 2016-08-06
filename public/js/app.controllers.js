@@ -1,5 +1,11 @@
 angular.module('pokeApp.controllers', [])
-    .controller('loginCtrl', function() {
+    .controller('mainCtrl', function($location) {
+      var vm = this;
+      vm.goTo = function(route){
+        $location.path(route)
+      }
+    })
+    .controller('loginCtrl', function(pokemonServices) {
       var vm = this;
       vm.message = "Este es el login";
     })
@@ -7,7 +13,10 @@ angular.module('pokeApp.controllers', [])
       var vm = this;
       vm.message = "Este es el admin de usuario";
     })
-    .controller('pokemonCtrl', function() {
+    .controller('pokemonCtrl', function($http ,pokemonServices) {
       var vm = this;
       vm.message = "Este es el admin de pokemon";
+      pokemonServices.getPokemons().then(function(response){
+            vm.pokemons = response;
+      })
     })

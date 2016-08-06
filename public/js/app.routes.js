@@ -12,14 +12,14 @@ angular.module('pokeApp.routes', ['ngRoute'])
       controllerAs: 'login'
     })
     .when('/users',{
-      templateUrl: 'views/pages/login.html',
+      templateUrl: 'views/pages/user.html',
       controller: 'userCtrl',
-      controllerAs: 'login'
+      controllerAs: 'users'
     })
     .when('/pokemons',{
-      templateUrl: 'views/pages/login.html',
+      templateUrl: 'views/pages/pokemon.html',
       controller: 'pokemonCtrl',
-      controllerAs: 'login'
+      controllerAs: 'pokemon'
     })
     .otherwise({
       redirectTo:"/"
