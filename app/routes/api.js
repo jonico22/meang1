@@ -56,7 +56,7 @@ module.exports = function(app,express){
 
   //middleware to verifya token
 
-  apiRouter.use(function(req,res,next){
+  /*apiRouter.use(function(req,res,next){
     console.log('alguien ha entrado a la matrix');
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -81,7 +81,7 @@ module.exports = function(app,express){
       });
     }
 
-  })
+  })*/
   apiRouter.get('/', function(req,res){
     res.json({
       message: "welcome to the matrix",
