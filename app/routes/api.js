@@ -110,6 +110,7 @@ module.exports = function(app,express){
                   });
               }
               res.json({
+                  success: true,
                   message: 'usuario registrado'
               });
           });

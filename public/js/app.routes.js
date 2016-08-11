@@ -14,7 +14,7 @@ angular.module('pokeApp.routes', ['ngRoute'])
     .when('/users',{
       templateUrl: 'views/pages/user.html',
       controller: 'userCtrl',
-      controllerAs: 'users'
+      controllerAs: 'user'
     })
     .when('/pokemons',{
       templateUrl: 'views/pages/pokemon.html',
