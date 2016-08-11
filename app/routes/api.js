@@ -56,7 +56,7 @@ module.exports = function(app,express){
 
   //middleware to verifya token
 
-  /*apiRouter.use(function(req,res,next){
+  apiRouter.use(function(req,res,next){
     console.log('alguien ha entrado a la matrix');
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -81,7 +81,7 @@ module.exports = function(app,express){
       });
     }
 
-  })*/
+  })
   apiRouter.get('/', function(req,res){
     res.json({
       message: "welcome to the matrix",
@@ -118,32 +118,6 @@ module.exports = function(app,express){
           User.find(function(err, users) {
               if (err) return res.send(err);
               res.json(users);
-          })
-      })
-      .put(function(req, res) {
-          User.findById(req.params.id, function(err, pearson) {
-              if (err) return res.send(err);
-              if (req.body.name) pearson.name = req.body.name;
-              if (req.body.username) pearson.username = req.body.username;
-              if (req.body.password) pearson.password = req.body.password;
-              pearson.save(function(err) {
-                  if (err) return res.send(err);
-                  res.json({
-                      success: true,
-                      message: 'usuario Actualizado'
-                  });
-              })
-          });
-      })
-      .delete(function(req, res) {
-          User.remove({
-              _id: req.params.id
-          }, function(err, pearson) {
-              if (err) return res.send(err);
-              res.json({
-                  success : true,
-                  message: 'Usuario eliminado'
-              });
           })
       })
 
@@ -273,6 +247,7 @@ module.exports = function(app,express){
               user.save(function(err) {
                   if (err) return res.send(err);
                   res.json({
+                      success: true,
                       message: 'Usuario Actualizado'
                   });
               })
@@ -284,6 +259,7 @@ module.exports = function(app,express){
           }, function(err, user) {
               if (err) return res.send(err);
               res.json({
+                  success: true,
                   message: 'El usuario eliminado'
               });
           })

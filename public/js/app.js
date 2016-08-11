@@ -8,4 +8,7 @@ angular.module('pokeApp',[
   'pokeApp.userService',
   'pokeApp.pokemonService',
   'lumx'
-]);
+])
+.config(function($httpProvider){
+  $httpProvider.interceptors.push('AuthInterceptor');
+})

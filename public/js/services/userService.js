@@ -32,8 +32,18 @@ angular.module('pokeApp.userService', [])
             res = deferred.promise;
             return res;
         }
-        this.update = function(id) {
-
+        this.update = function(id,data) {
+          var deferred = $q.defer();
+          var res;
+          $http.post("/api/users/" + id, data)
+              .success(function(response) {
+                  deferred.resolve(response);
+              })
+              .error(function(response) {
+                  deferred.reject(response);
+              });
+          res = deferred.promise;
+          return res;
         }
         this.delete = function(id) {
           var deferred = $q.defer();

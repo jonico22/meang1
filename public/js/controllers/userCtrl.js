@@ -9,6 +9,11 @@ angular.module('pokeApp.userCtrl', [])
         {
             LxDialogService.open('modal');
         }
+        vm.getUser = function(id){
+          User.get(id).then(function(response) {
+              console.log(response);
+          });
+        }
         vm.submitForm = function(form){
           User.create(form).then(function(response) {
               if(response.success){
