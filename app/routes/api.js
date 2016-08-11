@@ -102,7 +102,6 @@ module.exports = function(app,express){
 
           user.save(function(err) {
               //verifi duplicate entry on username
-              console.log(err);
               if (err) {
                   return res.json({
                       success: false,
@@ -120,7 +119,33 @@ module.exports = function(app,express){
               if (err) return res.send(err);
               res.json(users);
           })
-      });
+      })
+      .put(function(req, res) {
+          User.findById(req.params.id, function(err, pearson) {
+              if (err) return res.send(err);
+              if (req.body.name) pearson.name = req.body.name;
+              if (req.body.username) pearson.username = req.body.username;
+              if (req.body.password) pearson.password = req.body.password;
+              pearson.save(function(err) {
+                  if (err) return res.send(err);
+                  res.json({
+                      success: true,
+                      message: 'usuario Actualizado'
+                  });
+              })
+          });
+      })
+      .delete(function(req, res) {
+          User.remove({
+              _id: req.params.id
+          }, function(err, pearson) {
+              if (err) return res.send(err);
+              res.json({
+                  success : true,
+                  message: 'El user eliminado'
+              });
+          })
+      })
 
   // Routes /pokemons
   apiRouter.route('/pokemons')

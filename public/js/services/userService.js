@@ -36,6 +36,16 @@ angular.module('pokeApp.userService', [])
 
         }
         this.delete = function(id) {
-
+          var deferred = $q.defer();
+          var res;
+          $http.delete("/api/users/" + id)
+              .success(function(response) {
+                  deferred.resolve(response);
+              })
+              .error(function(response) {
+                  deferred.reject(response);
+              });
+          res = deferred.promise;
+          return res;
         }
     })
