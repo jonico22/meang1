@@ -142,7 +142,7 @@ module.exports = function(app,express){
               if (err) return res.send(err);
               res.json({
                   success : true,
-                  message: 'El user eliminado'
+                  message: 'Usuario eliminado'
               });
           })
       })
