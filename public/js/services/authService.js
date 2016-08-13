@@ -1,38 +1,38 @@
 angular.module('pokeApp.authService', [])
     .service('authService', function($http, $q, AuthToken, $location) {
-            this.login = function(username, password) {
-                return $http.post('/api/authenticate', {
-                    username: username,
-                    password: password
-                }).success(function(data) {
-                    AuthToken.setToken(data.token);
-                    return data;
-                })
+        this.login = function(username, password) {
+            return $http.post('/api/authenticate', {
+                username: username,
+                password: password
+            }).success(function(data) {
+                AuthToken.setToken(data.token);
+                return data;
+            })
+        }
+        this.logout = function() {
+            AuthToken.setToken();
+            $location.path('/login');
+        }
+        this.isLoggedIn = function() {
+            if (AuthToken.getToken()) {
+                return true;
+            } else {
+                return false;
             }
-            this.logout = function() {
-                AuthToken.setToken();
-                $location.path('/login');
+        }
+        this.getUser = function() {
+            if (AuthToken.getToken()) {
+                return $http.get('/api/me', {
+                    cache: true
+                });
+            } else {
+                return $q.reject({
+                    message: 'User has no token.'
+                });
             }
-            this.isLoggedIn = function() {
-                if (AuthToken.getToken) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            this.getUser = function() {
-                if (AuthToken.getToken()) {
-                    return $http.get('/api/me', {
-                        cache: true
-                    });
-                } else {
-                    return $q.reject({
-                        message: 'User has no token.'
-                    });
-                }
-            }
-})
-.service('AuthToken', function($window) {
+        }
+    })
+    .service('AuthToken', function($window) {
         this.getToken = function() {
             return $window.localStorage.getItem('token');
         }
