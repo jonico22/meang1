@@ -1,4 +1,4 @@
-<div class="p+">
+<!--div class="p+">
     <div class="card">
         <div flex-container="row">
             <div flex-item flex-container="column">
@@ -50,8 +50,6 @@
                                         </lx-dropdown>
                                     </div>
                                 </li>
-
-
                             </ul>
                         </div>
                     </div>
@@ -60,6 +58,98 @@
         </div>
     </div>
 </div>
-
-
+</div --->
+<div class="toolbar" ng-controller="mainCtrl as main">
+    <div class="toolbar__left mr++">
+        <lx-button lx-size="l" lx-color="black" lx-type="icon" ng-click="main.clickLogout()"><i class="mdi mdi-menu"></i></lx-button>
+    </div>
+    <span class="toolbar__label fs-title">ACCESS ADMIN</span>
 </div>
+<div class="p+">
+    <div class="card">
+        <div flex-container="row">
+            <div flex-item flex-container="column">
+                <div flex-item>
+                    <div class="p+">
+                        <div class="data-table-container">
+                            <header class="data-table-header">
+                                <div class="data-table-header__label">
+                                    <span class="fs-title">Mantenimiento Pokemon</span>
+                                </div>
+                                <div class="toolbar__right">
+                                    <lx-search-filter lx-closed="true">
+                                        <input type="text" ng-model="pokemon.search.name">
+                                    </lx-search-filter>
+                                    <lx-button lx-type="fab" ng-click="pokemon.openDialog()"><i class="mdi mdi-plus"></i> Agregar</lx-button>
+                                </div>
+                            </header>
+
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>name</th>
+                                        <th>type</th>
+                                        <th>
+                                            <i class="mdi mdi-comment-text"></i>
+                                            <span>Operaciones</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr ng-repeat="poke in pokemon.pokemons | filter:pokemon.search">
+                                        <td>{{poke._id}}</td>
+                                        <td>{{poke.name}}</td>
+                                        <td>{{poke.type}}</td>
+                                        <td>
+                                            <lx-button lx-type="raised" lx-color="green">Editar</lx-button>
+                                            <lx-button lx-type="raised" ng-click="pokemon.deletePokemon(poke._id)" lx-color="red">Eliminar</lx-button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<lx-dialog id="modal">
+    <lx-dialog-header>
+        <div class="toolbar bgc-primary pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Agregar user
+            </span>
+        </div>
+    </lx-dialog-header>
+
+    <lx-dialog-content>
+        <lx-tab-pane>
+            <div class="p++">
+                <p>Agregar Usuario</p>
+                <div flex-container="row" flex-gutter="24">
+                    <div flex-item>
+                        <lx-text-field lx-label="Nombre">
+                            <input type="text" ng-model="pokemon.form.name" ng-required>
+                        </lx-text-field>
+                    </div>
+
+                    <div flex-item>
+                        <lx-text-field lx-label="Usuario">
+                            <input type="text" ng-model="pokemon.form.type" ng-required>
+                        </lx-text-field>
+                    </div>
+                </div>
+                <lx-button lx-color="green" ng-click="pokemon.submitForm(pokemon.form)" >Button</lx-button>
+            </div>
+            </div>
+        </lx-tab-pane>
+    </lx-dialog-content>
+
+    <lx-dialog-footer>
+        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cancel</lx-button>
+        <lx-button lx-type="flat" lx-dialog-close >Ok</lx-button>
+    </lx-dialog-footer>
+</lx-dialog>
